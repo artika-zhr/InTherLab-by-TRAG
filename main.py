@@ -80,7 +80,7 @@ if 'scores' not in st.session_state: st.session_state.scores={}
 NAV=['Beranda','Teori & Modul','Laboratorium Virtual','Kalkulator','Data & Analisis','Kuis','Tentang']
 with st.sidebar:
     st.markdown('<div class="brand"><b>InTherLab</b><small>Interactive Thermodynamics Laboratory · By TRAG</small></div>',unsafe_allow_html=True)
-    nav=st.radio('Navigasi',NAV,index=NAV.index(st.session_state.page),label_visibility='collapsed')
+    nav=st.radio('Navigasi',NAV,index=NAV.index(st.session_state.page) if st.session_state.page in NAV else 0,label_visibility='collapsed')
     if nav!=st.session_state.page: st.session_state.page=nav; st.rerun()
     st.divider(); st.caption('Alur: Konsep → Grafik → Eksplorasi → Penerapan → Kuis')
     st.write(f"Progress kuis: {len(st.session_state.scores)}/{len(MODULES)}")
@@ -572,6 +572,37 @@ def about_v32():
 
 st.markdown("""
 <style>
+/* ---------- USAGE GUIDE V3.5 : ONBOARDING + FLOATING HELP ---------- */
+.guide-modal-v35{position:fixed;inset:0;z-index:999998;background:rgba(16,43,83,.45);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:22px;animation:guideFadeInV35 .45s ease both}
+.guide-box-v35{width:min(820px,94vw);max-height:88vh;overflow:auto;background:#fff;border-radius:30px;border:3px solid #F00000;box-shadow:0 28px 80px rgba(128,0,0,.25);position:relative}
+.guide-top-v35{background:#800000;padding:28px 32px 25px;color:#fff;position:relative;overflow:hidden}
+.guide-top-v35:before,.guide-top-v35:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.guide-top-v35:before{width:170px;height:170px;right:-65px;top:-90px;background:#F00000;opacity:.85}
+.guide-top-v35:after{width:110px;height:110px;right:55px;bottom:-80px;background:#FFC917;opacity:.9}
+.guide-kicker-v35{font-size:.68rem;font-weight:950;letter-spacing:.16em;color:#FFE100;position:relative;z-index:1}
+.guide-top-v35 h2{color:#fff!important;margin:.35rem 0 .35rem;font-size:clamp(1.65rem,4vw,2.25rem);position:relative;z-index:1}
+.guide-top-v35 p{color:#FFF4E8!important;margin:0;max-width:680px;line-height:1.6;position:relative;z-index:1}
+.guide-body-v35{padding:24px 30px 28px}
+.guide-body-v35 h3{color:#800000!important;margin:.1rem 0 1rem}
+.guide-grid-v35{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.guide-item-v35{background:#FFF8E7;border:1px solid #FFD98A;border-top:5px solid #F8650C;border-radius:17px;padding:14px 12px;min-height:135px}
+.guide-item-v35 .num{display:inline-flex;width:29px;height:29px;border-radius:50%;align-items:center;justify-content:center;background:#F00000;color:#fff;font-size:.66rem;font-weight:950}
+.guide-item-v35 b{display:block;color:#800000;margin:.55rem 0 .25rem;font-size:.83rem}
+.guide-item-v35 small{display:block;color:#50638D;line-height:1.45;font-size:.72rem}
+.guide-flow-v35{margin-top:18px;background:#FFE100;border-radius:18px;padding:14px 16px;color:#800000}
+.guide-flow-v35 .label{font-size:.65rem;font-weight:950;letter-spacing:.12em;margin-bottom:8px}
+.guide-flow-v35 .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.guide-flow-v35 span{background:#fff;border:1px solid #F3B900;border-radius:999px;padding:7px 10px;font-size:.74rem;font-weight:850}
+.guide-flow-v35 i{font-style:normal;font-weight:950;color:#F00000}
+.guide-footer-v35{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid #E8DFAE}
+.guide-footer-v35 p{margin:0;color:#50638D;font-size:.75rem;line-height:1.4}
+.guide-close-v35{display:inline-flex;align-items:center;justify-content:center;text-decoration:none!important;background:#F00000;color:#fff!important;border-radius:999px;padding:11px 19px;font-weight:900;font-size:.8rem;box-shadow:0 8px 18px rgba(240,0,0,.2)}
+.guide-close-v35:hover{background:#C90000;color:#fff!important}
+.floating-guide-v35{position:fixed;right:22px;bottom:22px;z-index:999997;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none!important;background:#F00000;color:#fff!important;border:3px solid #FFE100;box-shadow:0 9px 24px rgba(128,0,0,.25);font-size:1.25rem;font-weight:950;transition:transform .2s ease,background .2s ease}
+.floating-guide-v35:hover{transform:translateY(-3px) scale(1.04);background:#800000;color:#fff!important}
+@keyframes guideFadeInV35{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}
+@media(max-width:850px){.guide-grid-v35{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.guide-grid-v35{grid-template-columns:repeat(2,1fr)}.guide-body-v35{padding:20px}.guide-top-v35{padding:24px}.guide-footer-v35{flex-direction:column;align-items:stretch}.guide-close-v35{text-align:center}}
 /* ---------- HOME V3.3 ---------- */
 .home-v33-kicker{font-size:.72rem;font-weight:950;letter-spacing:.15em;text-transform:uppercase;color:#800000}
 .home-v33-title{color:#102B53!important;font-size:clamp(2rem,4vw,3.4rem);line-height:1.02;letter-spacing:-.035em;margin:.15rem 0 .55rem}
@@ -719,7 +750,7 @@ def lab_v33():
     mid = st.selectbox('Pilih ruang eksperimen',options,index=options.index(mid),format_func=lambda x:f'⚗  {M[x][1]}',key='v33_lab_room')
     st.session_state.lab_experiment=mid
     title=M[mid][1]
-    kind=M[mid][6]
+    kind=str(M[mid][6]).strip().lower()
     info=LAB_INFO_V33[mid]
 
     st.markdown(f'<div class="lab-mission-v33"><div class="eyebrow">MISSION · {title.upper()}</div><h3>{info["mission"]}</h3><p><b>Target:</b> manipulasi variabel dan gunakan grafik/data untuk membuktikan penjelasanmu.</p></div>',unsafe_allow_html=True)
@@ -765,6 +796,17 @@ def home_v33():
 
     st.markdown(f'<div style="background:{p[0]};border-radius:26px;padding:38px 42px;color:#fff"><div style="font-size:.75rem;font-weight:950;letter-spacing:.14em;color:#FFE100">INTHERLAB · BY TRAG</div><h1 style="font-size:clamp(2.5rem,6vw,5rem);line-height:1;color:#fff!important;margin:.35rem 0 1rem">Termodinamika<br>bukan untuk dihafal.</h1><p style="max-width:820px;color:#FFF3E8;font-size:1.08rem;line-height:1.7">Uji fenomena. Gerakkan sistem. Baca grafik. Jelaskan dengan fisika.</p></div>',unsafe_allow_html=True)
 
+    st.markdown("""<div class='guide-preview-v34'>
+        <div class='guide-preview-label'>SEBELUM MULAI</div>
+        <h2>Belajar di InTherLab itu alurnya sederhana.</h2>
+        <p>Jangan langsung mengejar rumus. Ikuti alur <b>prediksi → eksperimen → data → grafik → penjelasan → penerapan</b>.</p>
+        <div class='guide-steps-v34'>
+            <div><span>01</span><b>Pelajari</b><small>Pahami konsep dan tujuan modul.</small></div>
+            <div><span>02</span><b>Prediksi</b><small>Tebak apa yang akan terjadi.</small></div>
+            <div><span>03</span><b>Eksperimen</b><small>Ubah variabel dan jalankan simulasi.</small></div>
+            <div><span>04</span><b>Analisis</b><small>Baca data, grafik, lalu jelaskan hasil.</small></div>
+        </div>
+    </div>""",unsafe_allow_html=True)
     st.markdown('<div class="home-v33-section"><div class="home-v33-kicker">START HERE</div><h2 class="home-v33-title">Kamu mau belajar dengan cara apa?</h2><p class="home-v33-sub">InTherLab dirancang agar siswa tidak hanya membaca konsep, tetapi menguji prediksi, melihat sistem bereaksi, membaca data, dan menghubungkannya dengan fenomena nyata.</p></div>',unsafe_allow_html=True)
     cols=st.columns(4)
     starts=[
@@ -847,7 +889,75 @@ def about_v33():
     st.markdown('<div class="source"><b>Catatan:</b> materi aplikasi merupakan sintesis pembelajaran; buku komersial digunakan sebagai rujukan konsep, bukan untuk menyalin teks.</div>',unsafe_allow_html=True)
     team_section_v32()
 
-# ---------- FINAL V3.3 ROUTING ----------
+def render_usage_onboarding_v35():
+    """First-entry onboarding modal. Re-openable from the floating help button."""
+    if 'guide_seen_v35' not in st.session_state:
+        st.session_state.guide_seen_v35 = False
+
+    # Query parameter is used by the floating HTML button so it can stay fixed
+    # without turning every Streamlit button into a fixed-position control.
+    try:
+        if st.query_params.get("guide") == "1":
+            st.session_state.guide_seen_v35 = False
+            st.query_params.clear()
+    except Exception:
+        pass
+
+    if st.session_state.guide_seen_v35:
+        st.markdown(
+            '<a class="floating-guide-v35" href="?guide=1" title="Petunjuk Penggunaan" aria-label="Petunjuk Penggunaan">?</a>',
+            unsafe_allow_html=True
+        )
+        return
+
+    st.markdown("""
+    <div class="guide-modal-v35">
+      <div class="guide-box-v35">
+        <div class="guide-top-v35">
+          <div class="guide-kicker-v35">WELCOME TO INTHERLAB · BY TRAG</div>
+          <h2>📖 Sebelum mulai, kenali dulu alurnya.</h2>
+          <p>InTherLab bukan sekadar tempat membaca teori. Kamu akan membuat prediksi, menjalankan eksperimen virtual, membaca data, lalu menjelaskan fenomena dengan konsep fisika.</p>
+        </div>
+        <div class="guide-body-v35">
+          <h3>Bagaimana cara belajar di InTherLab?</h3>
+          <div class="guide-grid-v35">
+            <div class="guide-item-v35"><span class="num">01</span><b>Pelajari</b><small>Kenali konsep, persamaan, visualisasi, dan contoh penerapan.</small></div>
+            <div class="guide-item-v35"><span class="num">02</span><b>Prediksi</b><small>Tentukan apa yang kamu perkirakan akan terjadi sebelum eksperimen.</small></div>
+            <div class="guide-item-v35"><span class="num">03</span><b>Eksperimen</b><small>Ubah variabel dan jalankan simulasi untuk melihat respons sistem.</small></div>
+            <div class="guide-item-v35"><span class="num">04</span><b>Analisis</b><small>Baca nilai, data, dan grafik sebagai bukti hasil eksperimen.</small></div>
+            <div class="guide-item-v35"><span class="num">05</span><b>Terapkan</b><small>Hubungkan hasil dengan konsep fisika dan fenomena kehidupan nyata.</small></div>
+          </div>
+          <div class="guide-flow-v35">
+            <div class="label">ALUR BELAJAR</div>
+            <div class="flow">
+              <span>Pelajari</span><i>→</i><span>Prediksi</span><i>→</i><span>Simulasi</span><i>→</i><span>Data</span><i>→</i><span>Grafik</span><i>→</i><span>Penjelasan</span><i>→</i><span>Penerapan</span>
+            </div>
+          </div>
+          <div class="guide-footer-v35">
+            <p>Kalau nanti lupa, jangan khawatir.<br>Gunakan ikon <b>?</b> di pojok kanan bawah untuk membuka petunjuk ini lagi.</p>
+            <a class="guide-close-v35" href="?guide=close">Mulai Belajar →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def guide_state_handler_v35():
+    try:
+        qp = st.query_params.get("guide")
+        if qp == "close":
+            st.session_state.guide_seen_v35 = True
+            st.query_params.clear()
+    except Exception:
+        pass
+
+# Handle close/open state before rendering the page.
+guide_state_handler_v35()
+
+# ---------- FINAL V3.5 ROUTING ----------
+if st.session_state.page not in NAV:
+    st.session_state.page = 'Beranda'
+
 if st.session_state.page=='Beranda': home_v33()
 elif st.session_state.page=='Teori & Modul': theory_v31()
 elif st.session_state.page=='Laboratorium Virtual': lab_v33()
@@ -856,4 +966,6 @@ elif st.session_state.page=='Data & Analisis': data_v31()
 elif st.session_state.page=='Kuis': quiz_v31()
 elif st.session_state.page=='Tentang': about_v33()
 
-st.markdown('<div class="footer"><b>InTherLab By TRAG</b> · Interactive Thermodynamics Laboratory · Physics Education · Universitas Negeri Medan</div>',unsafe_allow_html=True)
+render_usage_onboarding_v35()
+
+st.markdown('<div class="footer"><b>InTherLab By TRAG</b> · Interactive Thermodynamics Laboratory · Physics Education · Universitas Negeri Medan · v3.5</div>',unsafe_allow_html=True)
